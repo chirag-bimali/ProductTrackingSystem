@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/PTS.API/PTS.API.csproj" />
+    <Project Path="src/PTS.Application/PTS.Application.csproj" />
+    <Project Path="src/PTS.Domain/PTS.Domain.csproj" />
+    <Project Path="src/PTS.Infrastructure/PTS.Infrastructure.csproj" />
+  </Folder>
+</Solution>
