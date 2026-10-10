@@ -2,18 +2,21 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using PTS.Infrastructure.Persistence;
 
 #nullable disable
 
-namespace PTS.Infrastructure.Persistence.Migrations
+namespace PTS.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20261010104507_InitialCreate")]
+    partial class InitialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -277,9 +280,6 @@ namespace PTS.Infrastructure.Persistence.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("character varying(500)");
 
-                    b.Property<Guid>("LocationId")
-                        .HasColumnType("uuid");
-
                     b.Property<string>("NameEn")
                         .IsRequired()
                         .HasMaxLength(200)
@@ -307,8 +307,6 @@ namespace PTS.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("Email")
                         .IsUnique();
-
-                    b.HasIndex("LocationId");
 
                     b.HasIndex("RoleId");
 
@@ -396,19 +394,11 @@ namespace PTS.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("PTS.Domain.Entities.User", b =>
                 {
-                    b.HasOne("PTS.Domain.Entities.Location", "Location")
-                        .WithMany()
-                        .HasForeignKey("LocationId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.HasOne("PTS.Domain.Entities.Role", "Role")
                         .WithMany("Users")
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
-
-                    b.Navigation("Location");
 
                     b.Navigation("Role");
                 });

@@ -1,11 +1,13 @@
 using MediatR;
 using PTS.Application.Abstractions.Persistence;
 using PTS.Application.Common.Abstractions.Security;
+using PTS.Application.Common.Response;
+using PTS.Application.Features.Authorization.Common;
 using PTS.Domain.Entities;
 
 namespace PTS.Application.Features.Authorization.Command.Register;
 
-public class RegisterCommandHandler : IRequestHandler<RegisterCommand, RegisterResult>
+public class RegisterCommandHandler : IRequestHandler<RegisterCommand, Result<RegisterResult>>
 {
     private readonly IUserRepository _users;
     private readonly IRoleRepository _roles;
@@ -27,10 +29,12 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand, RegisterR
         _uow = uow;
     }
 
-    public async Task<RegisterResult> Handle(RegisterCommand request, CancellationToken ct)
+    public async Task<Result<RegisterResult>> Handle(RegisterCommand request, CancellationToken ct)
     {
-        var role = await _roles.GetByNameAsync(request.Role, ct)
-            ?? throw new InvalidOperationException($"Role '{request.Role}' has not been seeded.");
+
+        var role = await _roles.GetByNameAsync(request.Role, ct);
+        if (role is null)
+            return AuthErrors.RoleNotFound(request.Role);
 
         // var location = new Location(
         //     request.WardId,

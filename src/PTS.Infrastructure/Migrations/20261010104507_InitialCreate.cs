@@ -3,14 +3,27 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace PTS.Infrastructure.Persistence.Migrations
+namespace PTS.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate2 : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "Products",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    Price = table.Column<decimal>(type: "numeric", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Products", x => x.Id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "provinces",
                 columns: table => new
@@ -61,6 +74,32 @@ namespace PTS.Infrastructure.Persistence.Migrations
                         name: "FK_districts_provinces_ProvinceId",
                         column: x => x.ProvinceId,
                         principalTable: "provinces",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "users",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    NameEn = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
+                    NameNp = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
+                    Contact = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false),
+                    Email = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
+                    ImageUrl = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: true),
+                    PasswordHash = table.Column<string>(type: "text", nullable: false),
+                    VerificationStatus = table.Column<bool>(type: "boolean", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    RoleId = table.Column<Guid>(type: "uuid", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_users", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_users_roles_RoleId",
+                        column: x => x.RoleId,
+                        principalTable: "roles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -131,39 +170,6 @@ namespace PTS.Infrastructure.Persistence.Migrations
                         name: "FK_locations_wards_WardId",
                         column: x => x.WardId,
                         principalTable: "wards",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "users",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    NameEn = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
-                    NameNp = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
-                    Contact = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false),
-                    Email = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
-                    ImageUrl = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: true),
-                    PasswordHash = table.Column<string>(type: "text", nullable: false),
-                    VerificationStatus = table.Column<bool>(type: "boolean", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    RoleId = table.Column<Guid>(type: "uuid", nullable: false),
-                    LocationId = table.Column<Guid>(type: "uuid", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_users", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_users_locations_LocationId",
-                        column: x => x.LocationId,
-                        principalTable: "locations",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_users_roles_RoleId",
-                        column: x => x.RoleId,
-                        principalTable: "roles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -255,11 +261,6 @@ namespace PTS.Infrastructure.Persistence.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_users_LocationId",
-                table: "users",
-                column: "LocationId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_users_RoleId",
                 table: "users",
                 column: "RoleId");
@@ -278,16 +279,19 @@ namespace PTS.Infrastructure.Persistence.Migrations
                 name: "factories");
 
             migrationBuilder.DropTable(
-                name: "users");
+                name: "Products");
 
             migrationBuilder.DropTable(
                 name: "locations");
 
             migrationBuilder.DropTable(
-                name: "roles");
+                name: "users");
 
             migrationBuilder.DropTable(
                 name: "wards");
+
+            migrationBuilder.DropTable(
+                name: "roles");
 
             migrationBuilder.DropTable(
                 name: "municipalities");

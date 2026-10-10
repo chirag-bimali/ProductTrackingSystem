@@ -1,4 +1,5 @@
 using MediatR;
+using PTS.Application.Common.Response;
 
 namespace PTS.Application.Features.Authorization.Command.Register;
 
@@ -12,6 +13,6 @@ public record RegisterCommand(
     int WardId,
     string? AddressLine = null,
     string? GpsCoordinates = null,
-    string? ImageUrl = null) : IRequest<RegisterResult>;
+    string? ImageUrl = null) : IRequest<Result<RegisterResult>>;
 
 public record RegisterResult(Guid UserId, string Email, string Role, bool IsVerified);

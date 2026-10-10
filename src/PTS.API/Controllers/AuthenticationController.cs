@@ -2,6 +2,8 @@
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using PTS.API.Responses;
+
 // using PTS.Application.Features.Authurization.Login;
 // using PTS.Application.Features.Auth.Login;
 // using PTS.Application.Features.Auth.Register;
@@ -14,18 +16,9 @@ namespace PTS.API.Controllers;
 public class AuthController(ISender sender) : ApiControllerBase
 {
   [HttpPost("register")]
-  [ProducesResponseType<AuthResponse>(StatusCodes.Status200OK)]
+  [ProducesResponseType<ApiResponse<RegisterResult>>(StatusCodes.Status200OK)]
+  [ProducesResponseType<ApiResponse<object>>(StatusCodes.Status400BadRequest)]
   public async Task<IActionResult> Register(RegisterCommand command, CancellationToken ct)
-  {
-    var result = await sender.Send(command, ct);
-    return Ok(result);
-  }
+    => HandleResult(await sender.Send(command, ct));
 
-  // [HttpPost("login")]
-  // [ProducesResponseType<AuthResponse>(StatusCodes.Status200OK)]
-  // public async Task<IActionResult> Login(LoginCommand command, CancellationToken ct)
-  // {
-  //     var result = await sender.Send(command, ct);
-  //     return Ok(result);
-  // }
 }
