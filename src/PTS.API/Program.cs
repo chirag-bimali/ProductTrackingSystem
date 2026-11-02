@@ -1,12 +1,11 @@
-using PTS.Infrastructure;
-using PTS.Application.Features.Products.CreateProduct;
-using MediatR;
-using PTS.Infrastructure.Persistence.Seed;
-using PTS.Application;
-using PTS.API.Responses;
 using Microsoft.AspNetCore.Mvc;
-using PTS.Application.Common.Response;
+using PTS.API.Common.Response;
 using PTS.API.Middleware;
+using PTS.Application;
+using PTS.Application.Common.Response;
+using PTS.Application.Features.Products.CreateProduct;
+using PTS.Infrastructure;
+using PTS.Infrastructure.Persistence.Seed;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,36 +14,50 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddOpenApi();
 
 // Register Infrastructure services
-var connectionString = builder.Configuration
-    .GetConnectionString("DefaultConnection")
+var connectionString =
+    builder.Configuration.GetConnectionString("DefaultConnection")
     ?? throw new InvalidOperationException(
-        "Database connection string 'DefaultConnection' was not found.");
+        "Database connection string 'DefaultConnection' was not found."
+    );
 
 builder.Services.AddInfrastructure(connectionString);
 builder.Services.AddApplication();
 
-builder.Services.AddControllers().ConfigureApiBehaviorOptions(options =>
-{
-    options.InvalidModelStateResponseFactory = context =>
+builder
+    .Services.AddControllers()
+    .ConfigureApiBehaviorOptions(options =>
     {
-        var details = context.ModelState
-            .Where(e => e.Value?.Errors.Count > 0)
-            .ToDictionary(e => e.Key, e => e.Value!.Errors.Select(x => x.ErrorMessage).ToArray());
+        options.InvalidModelStateResponseFactory = context =>
+        {
+            var details = context
+                .ModelState.Where(entry => entry.Value?.Errors.Count > 0)
+                .ToDictionary(
+                    entry => entry.Key,
+                    entry =>
+                        entry
+                            .Value!.Errors.Select(error =>
+                                string.IsNullOrWhiteSpace(error.ErrorMessage)
+                                    ? error.Exception?.Message ?? "The value is invalid."
+                                    : error.ErrorMessage
+                            )
+                            .ToArray()
+                );
 
-        var error = Error.Validation("Validation.Failed", "The request is invalid.", details);
-        return new BadRequestObjectResult(ApiResponse<object>.Fail(error));
-    };
-});
+            var error = Error.Validation(
+                "Validation.Failed",
+                "One or more validation errors occurred.",
+                details
+            );
+
+            return new BadRequestObjectResult(ApiResponse<object>.Fail(error));
+        };
+    });
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddProblemDetails();
 
 // Swagger services
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
-
-
-
 
 var app = builder.Build();
 app.UseExceptionHandler();
@@ -60,11 +73,10 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
 // app.UseAuthentication();
 // app.UseAuthorization();
 
 app.MapControllers();
-
-
 
 app.Run();

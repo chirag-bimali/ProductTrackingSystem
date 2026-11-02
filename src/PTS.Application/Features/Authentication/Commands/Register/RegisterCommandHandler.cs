@@ -1,4 +1,4 @@
-using MediatR;
+using PTS.Application.Abstractions.Messaging;
 using PTS.Application.Abstractions.Persistence;
 using PTS.Application.Common.Abstractions.Security;
 using PTS.Application.Common.Response;
@@ -7,10 +7,11 @@ using PTS.Domain.Entities;
 
 namespace PTS.Application.Features.Authorization.Command.Register;
 
-public class RegisterCommandHandler : IRequestHandler<RegisterCommand, Result<RegisterResult>>
+public class RegisterCommandHandler : ICommandHandler<RegisterCommand, RegisterResult>
 {
     private readonly IUserRepository _users;
     private readonly IRoleRepository _roles;
+
     // private readonly ILocationRepository _locations;
     private readonly IPasswordHasher _hasher;
     private readonly IUnitOfWork _uow;
@@ -20,7 +21,8 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand, Result<Re
         IRoleRepository roles,
         // ILocationRepository locations,
         IPasswordHasher hasher,
-        IUnitOfWork uow)
+        IUnitOfWork uow
+    )
     {
         _users = users;
         _roles = roles;
@@ -31,7 +33,6 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand, Result<Re
 
     public async Task<Result<RegisterResult>> Handle(RegisterCommand request, CancellationToken ct)
     {
-
         var role = await _roles.GetByNameAsync(request.Role, ct);
         if (role is null)
             return AuthErrors.RoleNotFound(request.Role);
@@ -47,9 +48,8 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand, Result<Re
             contact: request.Contact.Trim(),
             email: request.Email.Trim().ToLowerInvariant(),
             passwordHash: _hasher.Hash(request.Password),
-            roleId: role.Id,
-            // locationId: location.Id,
-            imageUrl: request.ImageUrl);
+            roleId: role.Id
+        );
 
         // await _locations.AddAsync(location, ct);
         await _users.AddAsync(user, ct);

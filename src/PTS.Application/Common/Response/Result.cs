@@ -1,23 +1,38 @@
 // src/PTS.Application/Common/Response/Result.cs
 namespace PTS.Application.Common.Response;
 
-public sealed class Result<T>
+public abstract record Result<T>
 {
-    public bool IsSuccess { get; }
-    public bool IsFailure => !IsSuccess;
-    public T? Value { get; }
-    public Error? Error { get; }
+    private Result() { }
 
-    private Result(bool isSuccess, T? value, Error? error)
+    public sealed record Ok(T Value) : Result<T>;
+
+    public sealed record Err(Error Error) : Result<T>;
+
+    public bool IsSuccess => this is Ok;
+
+    public TR Match<TR>(Func<T, TR> ok, Func<Err, TR> err) =>
+        this switch
+        {
+            Ok o => ok(o.Value),
+            Err e => err(e),
+            _ => throw new InvalidOperationException(),
+        };
+
+    public void Switch(Action<T> ok, Action<Err> err)
     {
-        IsSuccess = isSuccess;
-        Value = value;
-        Error = error;
+        switch (this)
+        {
+            case Ok o:
+                ok(o.Value);
+                break;
+            case Err e:
+                err(e);
+                break;
+        }
     }
 
-    public static Result<T> Success(T value) => new(true, value, null);
-    public static Result<T> Failure(Error error) => new(false, default, error);
+    public static implicit operator Result<T>(T value) => new Ok(value);
 
-    public static implicit operator Result<T>(T value) => Success(value);
-    public static implicit operator Result<T>(Error error) => Failure(error);
+    public static implicit operator Result<T>(Error error) => new Err(error);
 }

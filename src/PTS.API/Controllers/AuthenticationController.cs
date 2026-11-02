@@ -1,9 +1,7 @@
 // src/PTS.API/Controllers/AuthController.cs
-using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using PTS.API.Responses;
-
+using PTS.Application.Abstractions.Messaging;
 // using PTS.Application.Features.Authurization.Login;
 // using PTS.Application.Features.Auth.Login;
 // using PTS.Application.Features.Auth.Register;
@@ -13,12 +11,14 @@ using PTS.Application.Features.Authorization.Command.Register;
 namespace PTS.API.Controllers;
 
 [AllowAnonymous]
-public class AuthController(ISender sender) : ApiControllerBase
+public class AuthController(ICommandHandler<RegisterCommand, Guid> register) : ApiControllerBase
 {
-  [HttpPost("register")]
-  [ProducesResponseType<ApiResponse<RegisterResult>>(StatusCodes.Status200OK)]
-  [ProducesResponseType<ApiResponse<object>>(StatusCodes.Status400BadRequest)]
-  public async Task<IActionResult> Register(RegisterCommand command, CancellationToken ct)
-    => HandleResult(await sender.Send(command, ct));
-
+    [HttpPost("register")]
+    // [ProducesResponseType<ApiResponse<RegisterResult>>(StatusCodes.Status200OK)]
+    // [ProducesResponseType<ApiResponse<object>>(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> Register(RegisterCommand command, CancellationToken ct)
+    {
+        var result = await register.Handle(command, ct);
+        return FromResult(result);
+    }
 }

@@ -2,18 +2,40 @@
 namespace PTS.Application.Common.Response;
 
 public sealed record Error(
-    ErrorType Type,
     string Code,
-    string Message,
-    Dictionary<string, string[]>? Details = null,
-    Dictionary<int, Dictionary<string, string[]>>? RowErrors = null)
+    string Description,
+    ErrorType Type,
+    IDictionary<string, string[]>? Details = null
+)
 {
-  public static Error Validation(string code, string message, Dictionary<string, string[]>? details = null)
-      => new(ErrorType.Validation, code, message, details);
+    // "no error" placeholder
+    public static readonly Error None = new(string.Empty, string.Empty, ErrorType.Failure);
 
-  public static Error Unauthorized(string code, string message) => new(ErrorType.Unauthorized, code, message);
-  public static Error Forbidden(string code, string message) => new(ErrorType.Forbidden, code, message);
-  public static Error NotFound(string code, string message) => new(ErrorType.NotFound, code, message);
-  public static Error Conflict(string code, string message) => new(ErrorType.Conflict, code, message);
-  public static Error Failure(string code, string message) => new(ErrorType.Failure, code, message);
+    // Shortcuts so you don't write the type every time
+    public static Error Validation(
+        string code,
+        string description,
+        IDictionary<string, string[]>? details = null
+    ) => new(code, description, ErrorType.Validation, details);
+
+    public static Error NotFound(string code, string description) =>
+        new(code, description, ErrorType.NotFound);
+
+    public static Error UnauthorizedLogin(
+        string code,
+        string description,
+        IDictionary<string, string[]> Details
+    ) => new(code, description, ErrorType.Unauthorized, Details);
+
+    public static Error Unauthorized(string code, string description) =>
+        new(code, description, ErrorType.Unauthorized);
+
+    public static Error Forbidden(string code, string description) =>
+        new(code, description, ErrorType.Forbidden);
+
+    public static Error Conflict(string code, string description) =>
+        new(code, description, ErrorType.Conflict);
+
+    public static Error Failure(string code, string description) =>
+        new(code, description, ErrorType.Failure);
 }

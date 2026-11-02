@@ -1,7 +1,8 @@
 // src/PTS.API/Controllers/ApiControllerBase.cs
 using Microsoft.AspNetCore.Mvc;
+using PTS.API.Common.Response;
+using PTS.Application.Abstractions.Messaging;
 using PTS.Application.Common.Response;
-using PTS.API.Responses;
 
 namespace PTS.API.Controllers;
 
@@ -9,23 +10,32 @@ namespace PTS.API.Controllers;
 [Route("api/[controller]")]
 public abstract class ApiControllerBase : ControllerBase
 {
-  protected IActionResult HandleResult<T>(Result<T> result)
-  {
-    if (result.IsSuccess)
-      return Ok(ApiResponse<T>.Ok(result.Value!));
+    protected IActionResult FromNoContent(Result<Unit> result) =>
+        result.Match<IActionResult>(_ => NoContent(), err => ToError(err.Error));
 
-    Error error = result.Error!;
+    protected IActionResult FromResult<T>(Result<T> result) =>
+        result.Match<IActionResult>(
+            value => Ok(ApiResponse<T>.Ok(value)),
+            err => ToError(err.Error)
+        );
 
-    int status = error.Type switch
-    {
-      ErrorType.Validation => StatusCodes.Status400BadRequest,
-      ErrorType.Unauthorized => StatusCodes.Status401Unauthorized,
-      ErrorType.Forbidden => StatusCodes.Status403Forbidden,
-      ErrorType.NotFound => StatusCodes.Status404NotFound,
-      ErrorType.Conflict => StatusCodes.Status409Conflict,
-      _ => StatusCodes.Status500InternalServerError
-    };
+    protected IActionResult FromCreated<T>(Result<T> result, Func<T, string> location) =>
+        result.Match<IActionResult>(
+            value => Created(location(value), ApiResponse<T>.Ok(value)),
+            err => ToError(err.Error)
+        );
 
-    return StatusCode(status, ApiResponse<object>.Fail(error));
-  }
+    private IActionResult ToError(Error error) =>
+        StatusCode(StatusCodeFor(error.Type), ApiResponse<object>.Fail(error));
+
+    private static int StatusCodeFor(ErrorType type) =>
+        type switch
+        {
+            ErrorType.Validation => StatusCodes.Status400BadRequest,
+            ErrorType.Unauthorized => StatusCodes.Status401Unauthorized,
+            ErrorType.Forbidden => StatusCodes.Status403Forbidden,
+            ErrorType.NotFound => StatusCodes.Status404NotFound,
+            ErrorType.Conflict => StatusCodes.Status409Conflict,
+            _ => StatusCodes.Status500InternalServerError,
+        };
 }

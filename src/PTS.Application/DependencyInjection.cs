@@ -1,7 +1,7 @@
 using FluentValidation;
-using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using PTS.Application.Abstractions.Behaviours;
+using PTS.Application.Abstractions.Messaging;
 
 namespace PTS.Application;
 
@@ -11,13 +11,27 @@ public static class DependencyInjection
     {
         var assembly = typeof(DependencyInjection).Assembly;
 
-        services.AddMediatR(cfg =>
-        {
-            cfg.RegisterServicesFromAssembly(assembly);
-            cfg.AddOpenBehavior(typeof(ValidationBehavior<,>));
-        });
+        services.Scan(scan =>
+            scan.FromAssemblies(assembly)
+                .AddClasses(c =>
+                    c.AssignableTo(typeof(ICommandHandler<,>))
+                        .Where(t => !t.IsGenericTypeDefinition)
+                )
+                .AsImplementedInterfaces()
+                .WithScopedLifetime()
+                .AddClasses(c =>
+                    c.AssignableTo(typeof(IQueryHandler<,>)).Where(t => !t.IsGenericTypeDefinition)
+                )
+                .AsImplementedInterfaces()
+                .WithScopedLifetime()
+        );
 
         services.AddValidatorsFromAssembly(assembly);
+
+        // services.Decorate(typeof(IQueryHandler<,>), typeof(LoggingQueryDecorator<,>));
+        services.Decorate(typeof(ICommandHandler<,>), typeof(ValidationCommandDecorator<,>));
+
+        // services.Decorate(typeof(IQueryHandler<,>), typeof(ValidationQueryDecorator<,>));
 
         return services;
     }
