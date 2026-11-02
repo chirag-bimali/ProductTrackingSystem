@@ -8,7 +8,6 @@ public class WardConfiguration : IEntityTypeConfiguration<Ward>
 {
   public void Configure(EntityTypeBuilder<Ward> builder)
   {
-    builder.ToTable("wards");
     builder.HasKey(w => w.Id);
     builder.Property(w => w.Id).ValueGeneratedNever();
 

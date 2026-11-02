@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace PTS.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class Initialize : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -25,7 +25,7 @@ namespace PTS.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "provinces",
+                name: "Provinces",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false),
@@ -38,11 +38,11 @@ namespace PTS.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_provinces", x => x.Id);
+                    table.PrimaryKey("PK_Provinces", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "roles",
+                name: "Roles",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
@@ -51,11 +51,11 @@ namespace PTS.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_roles", x => x.Id);
+                    table.PrimaryKey("PK_Roles", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "districts",
+                name: "Districts",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false),
@@ -69,17 +69,17 @@ namespace PTS.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_districts", x => x.Id);
+                    table.PrimaryKey("PK_Districts", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_districts_provinces_ProvinceId",
+                        name: "FK_Districts_Provinces_ProvinceId",
                         column: x => x.ProvinceId,
-                        principalTable: "provinces",
+                        principalTable: "Provinces",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "users",
+                name: "Users",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
@@ -95,17 +95,17 @@ namespace PTS.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_users", x => x.Id);
+                    table.PrimaryKey("PK_Users", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_users_roles_RoleId",
+                        name: "FK_Users_Roles_RoleId",
                         column: x => x.RoleId,
-                        principalTable: "roles",
+                        principalTable: "Roles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "municipalities",
+                name: "Municipalities",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false),
@@ -118,17 +118,17 @@ namespace PTS.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_municipalities", x => x.Id);
+                    table.PrimaryKey("PK_Municipalities", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_municipalities_districts_DistrictId",
+                        name: "FK_Municipalities_Districts_DistrictId",
                         column: x => x.DistrictId,
-                        principalTable: "districts",
+                        principalTable: "Districts",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "wards",
+                name: "Wards",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false),
@@ -137,17 +137,17 @@ namespace PTS.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_wards", x => x.Id);
+                    table.PrimaryKey("PK_Wards", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_wards_municipalities_MunicipalityId",
+                        name: "FK_Wards_Municipalities_MunicipalityId",
                         column: x => x.MunicipalityId,
-                        principalTable: "municipalities",
+                        principalTable: "Municipalities",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "locations",
+                name: "Locations",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
@@ -159,23 +159,23 @@ namespace PTS.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_locations", x => x.Id);
+                    table.PrimaryKey("PK_Locations", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_locations_municipalities_MunicipalityId",
+                        name: "FK_Locations_Municipalities_MunicipalityId",
                         column: x => x.MunicipalityId,
-                        principalTable: "municipalities",
+                        principalTable: "Municipalities",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_locations_wards_WardId",
+                        name: "FK_Locations_Wards_WardId",
                         column: x => x.WardId,
-                        principalTable: "wards",
+                        principalTable: "Wards",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "factories",
+                name: "Factories",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
@@ -191,83 +191,83 @@ namespace PTS.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_factories", x => x.Id);
+                    table.PrimaryKey("PK_Factories", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_factories_locations_LocationId",
+                        name: "FK_Factories_Locations_LocationId",
                         column: x => x.LocationId,
-                        principalTable: "locations",
+                        principalTable: "Locations",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_factories_users_FactoryAdminId",
+                        name: "FK_Factories_Users_FactoryAdminId",
                         column: x => x.FactoryAdminId,
-                        principalTable: "users",
+                        principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_districts_ProvinceId",
-                table: "districts",
+                name: "IX_Districts_ProvinceId",
+                table: "Districts",
                 column: "ProvinceId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_factories_FactoryAdminId",
-                table: "factories",
+                name: "IX_Factories_FactoryAdminId",
+                table: "Factories",
                 column: "FactoryAdminId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_factories_LocationId",
-                table: "factories",
+                name: "IX_Factories_LocationId",
+                table: "Factories",
                 column: "LocationId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_factories_PanNumber",
-                table: "factories",
+                name: "IX_Factories_PanNumber",
+                table: "Factories",
                 column: "PanNumber",
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_locations_MunicipalityId",
-                table: "locations",
+                name: "IX_Locations_MunicipalityId",
+                table: "Locations",
                 column: "MunicipalityId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_locations_WardId",
-                table: "locations",
+                name: "IX_Locations_WardId",
+                table: "Locations",
                 column: "WardId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_municipalities_DistrictId",
-                table: "municipalities",
+                name: "IX_Municipalities_DistrictId",
+                table: "Municipalities",
                 column: "DistrictId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_roles_NameEn",
-                table: "roles",
+                name: "IX_Roles_NameEn",
+                table: "Roles",
                 column: "NameEn",
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_users_Contact",
-                table: "users",
+                name: "IX_Users_Contact",
+                table: "Users",
                 column: "Contact",
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_users_Email",
-                table: "users",
+                name: "IX_Users_Email",
+                table: "Users",
                 column: "Email",
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_users_RoleId",
-                table: "users",
+                name: "IX_Users_RoleId",
+                table: "Users",
                 column: "RoleId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_wards_MunicipalityId_Number",
-                table: "wards",
+                name: "IX_Wards_MunicipalityId_Number",
+                table: "Wards",
                 columns: new[] { "MunicipalityId", "Number" },
                 unique: true);
         }
@@ -276,31 +276,31 @@ namespace PTS.Infrastructure.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "factories");
+                name: "Factories");
 
             migrationBuilder.DropTable(
                 name: "Products");
 
             migrationBuilder.DropTable(
-                name: "locations");
+                name: "Locations");
 
             migrationBuilder.DropTable(
-                name: "users");
+                name: "Users");
 
             migrationBuilder.DropTable(
-                name: "wards");
+                name: "Wards");
 
             migrationBuilder.DropTable(
-                name: "roles");
+                name: "Roles");
 
             migrationBuilder.DropTable(
-                name: "municipalities");
+                name: "Municipalities");
 
             migrationBuilder.DropTable(
-                name: "districts");
+                name: "Districts");
 
             migrationBuilder.DropTable(
-                name: "provinces");
+                name: "Provinces");
         }
     }
 }

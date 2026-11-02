@@ -2,12 +2,11 @@ using PTS.Application.Abstractions.Messaging;
 using PTS.Application.Abstractions.Persistence;
 using PTS.Application.Common.Abstractions.Security;
 using PTS.Application.Common.Response;
-using PTS.Application.Features.Authorization.Common;
 using PTS.Domain.Entities;
 
 namespace PTS.Application.Features.Authorization.Command.Register;
 
-public class RegisterCommandHandler : ICommandHandler<RegisterCommand, RegisterResult>
+public class RegisterCommandHandler : ICommandHandler<RegisterCommand, Guid>
 {
     private readonly IUserRepository _users;
     private readonly IRoleRepository _roles;
@@ -31,16 +30,11 @@ public class RegisterCommandHandler : ICommandHandler<RegisterCommand, RegisterR
         _uow = uow;
     }
 
-    public async Task<Result<RegisterResult>> Handle(RegisterCommand request, CancellationToken ct)
+    public async Task<Result<Guid>> Handle(RegisterCommand request, CancellationToken ct)
     {
         var role = await _roles.GetByNameAsync(request.Role, ct);
         if (role is null)
-            return AuthErrors.RoleNotFound(request.Role);
-
-        // var location = new Location(
-        //     request.WardId,
-        //     request.AddressLine?.Trim(),
-        //     request.GpsCoordinates?.Trim());
+            return Error.NotFound("role.not_found", $"Role '{request.Role}' not found.");
 
         var user = new User(
             nameEn: request.NameEn.Trim(),
@@ -51,12 +45,10 @@ public class RegisterCommandHandler : ICommandHandler<RegisterCommand, RegisterR
             roleId: role.Id
         );
 
-        // await _locations.AddAsync(location, ct);
         await _users.AddAsync(user, ct);
 
-        // One save, so the location and the user are stored together or not at all
         await _uow.SaveChangesAsync(ct);
 
-        return new RegisterResult(user.Id, user.Email, role.NameEn, user.VerificationStatus);
+        return user.Id;
     }
 }

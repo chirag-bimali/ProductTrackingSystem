@@ -6,7 +6,6 @@ public class DistrictConfiguration : IEntityTypeConfiguration<District>
 {
   public void Configure(EntityTypeBuilder<District> builder)
   {
-    builder.ToTable("districts");
     builder.HasKey(d => d.Id);
     builder.Property(d => d.Id).ValueGeneratedNever();
     builder.Property(d => d.NameEn).IsRequired().HasMaxLength(100);

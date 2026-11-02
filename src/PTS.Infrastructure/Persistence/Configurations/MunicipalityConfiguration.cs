@@ -6,7 +6,6 @@ public class MunicipalityConfiguration : IEntityTypeConfiguration<Municipality>
 {
     public void Configure(EntityTypeBuilder<Municipality> builder)
     {
-        builder.ToTable("municipalities");
         builder.HasKey(m => m.Id);
         builder.Property(m => m.Id).ValueGeneratedNever();
         builder.Property(m => m.NameEn).IsRequired().HasMaxLength(150);

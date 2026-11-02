@@ -8,7 +8,6 @@ public class FactoryConfiguration : IEntityTypeConfiguration<Factory>
 {
     public void Configure(EntityTypeBuilder<Factory> builder)
     {
-        builder.ToTable("factories");
         builder.HasKey(f => f.Id);
 
         builder.Property(f => f.NameEn).IsRequired().HasMaxLength(200);

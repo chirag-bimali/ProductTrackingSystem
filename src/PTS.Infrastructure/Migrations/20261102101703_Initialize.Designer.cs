@@ -12,8 +12,8 @@ using PTS.Infrastructure.Persistence;
 namespace PTS.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20261010104507_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20261102101703_Initialize")]
+    partial class Initialize
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -59,7 +59,7 @@ namespace PTS.Infrastructure.Migrations
 
                     b.HasIndex("ProvinceId");
 
-                    b.ToTable("districts", (string)null);
+                    b.ToTable("Districts");
                 });
 
             modelBuilder.Entity("PTS.Domain.Entities.Factory", b =>
@@ -114,7 +114,7 @@ namespace PTS.Infrastructure.Migrations
                     b.HasIndex("PanNumber")
                         .IsUnique();
 
-                    b.ToTable("factories", (string)null);
+                    b.ToTable("Factories");
                 });
 
             modelBuilder.Entity("PTS.Domain.Entities.Location", b =>
@@ -146,7 +146,7 @@ namespace PTS.Infrastructure.Migrations
 
                     b.HasIndex("WardId");
 
-                    b.ToTable("locations", (string)null);
+                    b.ToTable("Locations");
                 });
 
             modelBuilder.Entity("PTS.Domain.Entities.Municipality", b =>
@@ -180,7 +180,7 @@ namespace PTS.Infrastructure.Migrations
 
                     b.HasIndex("DistrictId");
 
-                    b.ToTable("municipalities", (string)null);
+                    b.ToTable("Municipalities");
                 });
 
             modelBuilder.Entity("PTS.Domain.Entities.Product", b =>
@@ -230,7 +230,7 @@ namespace PTS.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("provinces", (string)null);
+                    b.ToTable("Provinces");
                 });
 
             modelBuilder.Entity("PTS.Domain.Entities.Role", b =>
@@ -254,7 +254,7 @@ namespace PTS.Infrastructure.Migrations
                     b.HasIndex("NameEn")
                         .IsUnique();
 
-                    b.ToTable("roles", (string)null);
+                    b.ToTable("Roles");
                 });
 
             modelBuilder.Entity("PTS.Domain.Entities.User", b =>
@@ -310,7 +310,7 @@ namespace PTS.Infrastructure.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("users", (string)null);
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("PTS.Domain.Entities.Ward", b =>
@@ -329,7 +329,7 @@ namespace PTS.Infrastructure.Migrations
                     b.HasIndex("MunicipalityId", "Number")
                         .IsUnique();
 
-                    b.ToTable("wards", (string)null);
+                    b.ToTable("Wards");
                 });
 
             modelBuilder.Entity("PTS.Domain.Entities.District", b =>
