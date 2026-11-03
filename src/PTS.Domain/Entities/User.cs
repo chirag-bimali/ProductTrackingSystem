@@ -11,9 +11,15 @@ public class User
     public string PasswordHash { get; private set; } = string.Empty;
     public bool VerificationStatus { get; private set; }
     public DateTime CreatedAt { get; private set; }
+    public ICollection<UserRole> UserRoles { get; private set; } = new List<UserRole>();
 
-    public Guid RoleId { get; private set; }
-    public Role Role { get; private set; } = null!;
+    public void AssignRole(Role role)
+    {
+        if (UserRoles.Any(ur => ur.RoleId == role.Id))
+            return; // already has this role
+
+        UserRoles.Add(new UserRole(Id, role.Id));
+    }
 
     private User() { }
 
@@ -23,9 +29,8 @@ public class User
         string contact,
         string email,
         string passwordHash,
-        Guid roleId,
-        // Guid locationId,
-        string? imageUrl = null)
+        string? imageUrl = null
+    )
     {
         Id = Guid.NewGuid();
         NameEn = nameEn;
@@ -33,7 +38,6 @@ public class User
         Contact = contact;
         Email = email;
         PasswordHash = passwordHash;
-        RoleId = roleId;
         ImageUrl = imageUrl;
         VerificationStatus = false;
         CreatedAt = DateTime.UtcNow;

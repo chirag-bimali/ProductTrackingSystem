@@ -16,19 +16,11 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         builder.Property(u => u.Email).IsRequired().HasMaxLength(256);
         builder.Property(u => u.PasswordHash).IsRequired();
         builder.Property(u => u.ImageUrl).HasMaxLength(500);
+        builder.Property(u => u.VerificationStatus).IsRequired();
+        builder.Property(u => u.CreatedAt).IsRequired();
 
         // Login works with email or contact, so both must be unique
         builder.HasIndex(u => u.Email).IsUnique();
         builder.HasIndex(u => u.Contact).IsUnique();
-
-        builder.HasOne(u => u.Role)
-            .WithMany(r => r.Users)
-            .HasForeignKey(u => u.RoleId)
-            .OnDelete(DeleteBehavior.Restrict);
-
-        // builder.HasOne(u => u.Location)
-        //     .WithMany()
-        //     .HasForeignKey(u => u.LocationId)
-        //     .OnDelete(DeleteBehavior.Restrict);
     }
 }

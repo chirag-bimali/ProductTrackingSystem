@@ -4,12 +4,11 @@ using PTS.Domain.Entities;
 
 namespace PTS.Infrastructure.Persistence.Repositories;
 
-public class RoleRepository : IRoleRepository
+public class RoleRepository : Repository<Role>, IRoleRepository
 {
-    private readonly AppDbContext _db;
+    public RoleRepository(AppDbContext db)
+        : base(db) { }
 
-    public RoleRepository(AppDbContext db) => _db = db;
-
-    public Task<Role?> GetByNameAsync(string nameEn, CancellationToken ct = default)
-        => _db.Roles.FirstOrDefaultAsync(r => r.NameEn == nameEn, ct);
+    public Task<Role?> GetByNameAsync(string nameEn, CancellationToken ct = default) =>
+        Db.Roles.FirstOrDefaultAsync(r => r.NameEn == nameEn, ct);
 }
