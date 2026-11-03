@@ -54,6 +54,16 @@ builder
     });
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddProblemDetails();
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(
+        "AllowAll",
+        policy =>
+        {
+            policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+        }
+    );
+});
 
 // Swagger services
 builder.Services.AddEndpointsApiExplorer();
@@ -61,6 +71,7 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 app.UseExceptionHandler();
+app.UseCors("AllowAll");
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
