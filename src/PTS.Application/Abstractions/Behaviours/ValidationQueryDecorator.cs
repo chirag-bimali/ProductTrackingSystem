@@ -1,5 +1,7 @@
 using FluentValidation;
+using Microsoft.Extensions.Localization;
 using PTS.Application.Abstractions.Messaging;
+using PTS.Application.Common.Localization.Shared;
 using PTS.Application.Common.Response;
 
 public class ValidationQueryDecorator<TQuery, TResult> : IQueryHandler<TQuery, TResult>
@@ -7,13 +9,17 @@ public class ValidationQueryDecorator<TQuery, TResult> : IQueryHandler<TQuery, T
     private readonly IQueryHandler<TQuery, TResult> _inner;
     private readonly IEnumerable<IValidator<TQuery>> _validators;
 
+    private readonly IStringLocalizer<SharedResource> _localizer;
+
     public ValidationQueryDecorator(
         IQueryHandler<TQuery, TResult> inner,
-        IEnumerable<IValidator<TQuery>> validators
+        IEnumerable<IValidator<TQuery>> validators,
+        IStringLocalizer<SharedResource> localizer
     )
     {
         _inner = inner;
         _validators = validators;
+        _localizer = localizer;
     }
 
     public async Task<Result<TResult>> Handle(TQuery command, CancellationToken ct)
@@ -32,7 +38,7 @@ public class ValidationQueryDecorator<TQuery, TResult> : IQueryHandler<TQuery, T
 
                 return Error.Validation(
                     "Validation.Failed",
-                    "One or more validation errors occurred.",
+                    _localizer["ValidationErrors"],
                     details
                 );
             }

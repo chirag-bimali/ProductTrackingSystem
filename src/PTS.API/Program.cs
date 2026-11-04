@@ -1,11 +1,16 @@
+using System.Globalization;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 using PTS.API.Common.Response;
 using PTS.API.Middleware;
 using PTS.Application;
+using PTS.Application.Common.Localization.Shared;
 using PTS.Application.Common.Response;
 using PTS.Application.Features.Products.CreateProduct;
 using PTS.Infrastructure;
 using PTS.Infrastructure.Persistence.Seed;
+using PTS.API.Swagger;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,6 +34,9 @@ builder
     {
         options.InvalidModelStateResponseFactory = context =>
         {
+            var localizer = context.HttpContext.RequestServices.GetRequiredService<
+                IStringLocalizer<SharedResource>
+            >();
             var details = context
                 .ModelState.Where(entry => entry.Value?.Errors.Count > 0)
                 .ToDictionary(
@@ -45,7 +53,7 @@ builder
 
             var error = Error.Validation(
                 "Validation.Failed",
-                "One or more validation errors occurred.",
+                localizer["ValidationErrors"].Value,
                 details
             );
 
@@ -67,11 +75,33 @@ builder.Services.AddCors(options =>
 
 // Swagger services
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.OperationFilter<AcceptLanguageOperationFilter>();
+});
+
+// Localization services
+builder.Services.AddLocalization(options =>
+{
+    options.ResourcesPath = "Resources";
+});
+
+var supportedCultures = new[] { new CultureInfo("en"), new CultureInfo("ne") };
+
+builder.Services.Configure<RequestLocalizationOptions>(options =>
+{
+    options.DefaultRequestCulture = new RequestCulture("ne");
+
+    options.SupportedCultures = supportedCultures;
+    options.SupportedUICultures = supportedCultures;
+
+    options.RequestCultureProviders = [new AcceptLanguageHeaderRequestCultureProvider()];
+});
 
 var app = builder.Build();
 app.UseExceptionHandler();
 app.UseCors("AllowAll");
+app.UseRequestLocalization();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

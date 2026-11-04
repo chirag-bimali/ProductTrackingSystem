@@ -1,12 +1,17 @@
 // src/PTS.API/Middleware/GlobalExceptionHandler.cs
 using FluentValidation;
 using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.Extensions.Localization;
 using PTS.API.Common.Response;
+using PTS.Application.Common.Localization.Shared;
 using PTS.Application.Common.Response;
 
 namespace PTS.API.Middleware;
 
-public sealed class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger)
+public sealed class GlobalExceptionHandler(
+    ILogger<GlobalExceptionHandler> logger,
+    IStringLocalizer<SharedResource> localizer
+)
     : IExceptionHandler
 {
     public async ValueTask<bool> TryHandleAsync(
@@ -26,7 +31,7 @@ public sealed class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logge
 
             error = Error.Validation(
                 "Validation.Failed",
-                "One or more validation errors occurred.",
+                localizer["ValidationErrors"].Value,
                 details
             );
             status = StatusCodes.Status400BadRequest;

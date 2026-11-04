@@ -1,6 +1,8 @@
 using FluentValidation;
 using FluentValidation.Results;
+using Microsoft.Extensions.Localization;
 using PTS.Application.Abstractions.Messaging;
+using PTS.Application.Common.Localization.Shared;
 using PTS.Application.Common.Response;
 
 namespace PTS.Application.Abstractions.Behaviours;
@@ -9,14 +11,17 @@ public class ValidationCommandDecorator<TCommand, TResult> : ICommandHandler<TCo
 {
     private readonly ICommandHandler<TCommand, TResult> _inner;
     private readonly IEnumerable<IValidator<TCommand>> _validators;
+    private readonly IStringLocalizer<SharedResource> _localizer;
 
     public ValidationCommandDecorator(
         ICommandHandler<TCommand, TResult> inner,
-        IEnumerable<IValidator<TCommand>> validators
+        IEnumerable<IValidator<TCommand>> validators,
+        IStringLocalizer<SharedResource> localizer
     )
     {
         _inner = inner;
         _validators = validators;
+        _localizer = localizer;
     }
 
     public async Task<Result<TResult>> Handle(TCommand command, CancellationToken ct)
@@ -34,8 +39,8 @@ public class ValidationCommandDecorator<TCommand, TResult> : ICommandHandler<TCo
                     .ToDictionary(g => g.Key, g => g.Select(f => f.ErrorMessage).ToArray());
 
                 return Error.Validation(
-                    "Validation.Failed",
-                    "One or more validation errors occurred.",
+                    "Validation.Failedfdfddf",
+                    _localizer["ValidationErrors"],
                     details
                 );
             }

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms</value>
+  </resheader>
+
+  <data name="UserNotFound" xml:space="preserve">
+    <value>प्रयोगकर्ता फेला परेन।</value>
+  </data>
+  <data name="ContactRequired" xml:space="preserve">
+    <value>सम्पर्क नम्बर आवश्यक छ।</value>
+  </data>
+  <data name="ContactInvalid" xml:space="preserve">
+    <value>सम्पर्क नम्बर ९७ वा ९८ बाट सुरु हुने १० अङ्कको मोबाइल नम्बर हुनुपर्छ।</value>
+  </data>
+  <data name="EmailOrContactRequired" xml:space="preserve">
+    <value>इमेल वा फोन नम्बर मध्ये कुनै एक आवश्यक छ।</value>
+  </data>
+  <data name="InvalidEmail" xml:space="preserve">
+    <value>अवैध इमेल ठेगाना।</value>
+  </data>
+  <data name="InvalidCredentials" xml:space="preserve">
+    <value>इमेल, फोन वा पासवर्ड गलत छ।</value>
+  </data>
+  <data name="EmailRequired" xml:space="preserve">
+    <value>इमेल आवश्यक छ।</value>
+  </data>
+  <data name="EmailMaxLength" xml:space="preserve">
+    <value>इमेल २५६ अक्षरभन्दा लामो हुनुहुँदैन।</value>
+  </data>
+  <data name="EmailAlreadyRegistered" xml:space="preserve">
+    <value>यो इमेल पहिले नै दर्ता भइसकेको छ।</value>
+  </data>
+  <data name="PasswordRequired" xml:space="preserve">
+    <value>पासवर्ड आवश्यक छ।</value>
+  </data>
+  <data name="PasswordMinLength" xml:space="preserve">
+    <value>पासवर्ड कम्तीमा ८ अक्षर लामो हुनुपर्छ।</value>
+  </data>
+  <data name="PasswordMaxLength" xml:space="preserve">
+    <value>पासवर्ड ७२ अक्षरभन्दा लामो हुनुहुँदैन।</value>
+  </data>
+  <data name="PasswordUppercaseRequired" xml:space="preserve">
+    <value>पासवर्डमा कम्तीमा एउटा ठूलो अक्षर हुनुपर्छ।</value>
+  </data>
+  <data name="PasswordLowercaseRequired" xml:space="preserve">
+    <value>पासवर्डमा कम्तीमा एउटा सानो अक्षर हुनुपर्छ।</value>
+  </data>
+  <data name="PasswordDigitRequired" xml:space="preserve">
+    <value>पासवर्डमा कम्तीमा एउटा अंक हुनुपर्छ।</value>
+  </data>
+  <data name="UserCreated" xml:space="preserve">
+    <value>प्रयोगकर्ता सफलतापूर्वक सिर्जना गरियो।</value>
+  </data>
+  <data name="UserUpdated" xml:space="preserve">
+    <value>प्रयोगकर्ता सफलतापूर्वक अद्यावधिक गरियो।</value>
+  </data>
+</root>

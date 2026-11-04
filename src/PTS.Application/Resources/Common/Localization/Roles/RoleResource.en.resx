@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms</value>
+  </resheader>
+
+  <data name="RoleRequired" xml:space="preserve">
+    <value>Role is required.</value>
+  </data>
+  <data name="RoleNotAllowed" xml:space="preserve">
+    <value>Role '{0}' is not allowed.</value>
+  </data>
+  <data name="RoleNotFound" xml:space="preserve">
+    <value>Role not found.</value>
+  </data>
+</root>
