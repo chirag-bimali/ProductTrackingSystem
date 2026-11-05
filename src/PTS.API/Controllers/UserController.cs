@@ -11,14 +11,14 @@ public class UserController(
         getAllLocalAdminQueryHandler
 ) : ApiControllerBase
 {
-    [HttpPost("CreateLocalAdmin")]
+    [HttpPost("LocalAdmin")]
     public async Task<IActionResult> CreateLocalAdmin([FromBody] CreateLocalAdminCommand command)
     {
         var result = await createLocalAdminCommandHandler.Handle(command, HttpContext.RequestAborted);
         return FromResult(result);
     }
 
-    [HttpGet("local-admins")]
+    [HttpGet("LocalAdmin")]
     public async Task<IActionResult> GetAllLocalAdmins(
         [FromQuery] GetAllLocalAdminQuery query,
         CancellationToken cancellationToken
