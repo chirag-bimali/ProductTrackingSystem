@@ -11,6 +11,7 @@ public class AppDbContext(
     public DbSet<Product> Products => Set<Product>();
     public DbSet<Role> Roles => Set<Role>();
     public DbSet<User> Users => Set<User>();
+    public DbSet<LocalAdmin> LocalAdmins => Set<LocalAdmin>();
     public DbSet<Factory> Factories => Set<Factory>();
     public DbSet<Location> Locations => Set<Location>();
     public DbSet<Province> Provinces => Set<Province>();
