@@ -2,7 +2,7 @@ using PTS.Application.Abstractions.Messaging;
 using PTS.Application.Abstractions.Persistence;
 using PTS.Application.Common.Response;
 
-namespace PTS.Application.Features.Locations.Queries.GetAllProvincesQuery;
+namespace PTS.Application.Features.Locations.Queries.GetAllProvinceQuery;
 
 public class GetAllProvincesQueryHandler : IQueryHandler<GetAllProvinceQuery, List<ProvinceResult>>
 {

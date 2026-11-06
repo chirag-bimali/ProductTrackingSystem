@@ -1,7 +1,9 @@
-
+using PTS.Application.Common.Security;
 
 namespace PTS.Application.Features.Authentication.Commands.Register;
 
+[RequireNoAuthentication]
+[RequirePermission(Permissions.No.Permission)]
 public record RegisterCommand(
     string NameEn,
     string NameNp,

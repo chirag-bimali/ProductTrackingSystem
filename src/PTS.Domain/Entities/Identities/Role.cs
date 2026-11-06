@@ -2,25 +2,27 @@ namespace PTS.Domain.Entities.Identities;
 
 public class Role
 {
-  public Guid Id { get; private set; }
-  public string NameEn { get; private set; } = string.Empty;
-  public string NameNp { get; private set; } = string.Empty;
+    public Guid Id { get; private set; }
+    public string NameEn { get; private set; } = string.Empty;
+    public string NameNp { get; private set; } = string.Empty;
 
-  // Navigation property for EF Core
-  public ICollection<User> Users { get; private set; } = new List<User>();
+    // Navigation property for EF Core
+    public ICollection<User> Users { get; private set; } = new List<User>();
+    public ICollection<RolePermission> RolePermissions { get; private set; } =
+        new List<RolePermission>();
 
-  // EF Core constructor
-  private Role() { }
+    // EF Core constructor
+    private Role() { }
 
-  public Role(string nameEn, string nameNp)
-  {
-    if (string.IsNullOrWhiteSpace(nameEn))
-      throw new ArgumentException("Role name cannot be empty.", nameof(nameEn));
-    if (string.IsNullOrWhiteSpace(nameNp))
-      throw new ArgumentException("Role name cannot be empty.", nameof(nameNp));
+    public Role(string nameEn, string nameNp)
+    {
+        if (string.IsNullOrWhiteSpace(nameEn))
+            throw new ArgumentException("Role name cannot be empty.", nameof(nameEn));
+        if (string.IsNullOrWhiteSpace(nameNp))
+            throw new ArgumentException("Role name cannot be empty.", nameof(nameNp));
 
-    Id = Guid.NewGuid();
-    NameEn = nameEn;
-    NameNp = nameNp;
-  }
+        Id = Guid.NewGuid();
+        NameEn = nameEn;
+        NameNp = nameNp;
+    }
 }

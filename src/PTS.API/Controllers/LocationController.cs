@@ -4,7 +4,7 @@ using PTS.Application.Abstractions.Messaging;
 using PTS.Application.Features.Locations.Queries.GetAllLocationQuery;
 using DistrictQueries = PTS.Application.Features.Locations.Queries.GetAllDistrictByProvinceIdQuery;
 using MunicipalityQueries = PTS.Application.Features.Locations.Queries.GetAllMunicipalityByDistrictIdQuery;
-using ProvinceQueries = PTS.Application.Features.Locations.Queries.GetAllProvincesQuery;
+using ProvinceQueries = PTS.Application.Features.Locations.Queries.GetAllProvinceQuery;
 using WardQueries = PTS.Application.Features.Locations.Queries.GetAllWardByMunicipalityIdQuery;
 
 public class LocationController(

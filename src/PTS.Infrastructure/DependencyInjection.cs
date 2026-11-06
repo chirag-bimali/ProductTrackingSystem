@@ -1,3 +1,4 @@
+using System.Security;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using PTS.Application.Abstractions.Persistence;
@@ -7,6 +8,7 @@ using PTS.Infrastructure.Persistence;
 using PTS.Infrastructure.Persistence.Repositories;
 using PTS.Infrastructure.Persistence.Seedings;
 using PTS.Infrastructure.Security;
+using SE.Application.Abstractions.Security;
 
 namespace PTS.Infrastructure;
 
@@ -29,6 +31,7 @@ public static class DependencyInjection
 
         services.AddSingleton<IPasswordHasher, BcryptPasswordHasher>();
         services.AddSingleton<IJwtTokenService, JwtTokenService>();
+        services.AddScoped<IPermissionService, PermissionService>();
 
         // services.AddScoped<DbSeeder>();
 

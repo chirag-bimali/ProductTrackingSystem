@@ -1,6 +1,6 @@
 using PTS.Domain.Entities;
 
-namespace PTS.Application.Features.Locations.Queries.GetAllProvincesQuery;
+namespace PTS.Application.Features.Locations.Queries.GetAllProvinceQuery;
 
 public record ProvinceResult(
     int Id,
