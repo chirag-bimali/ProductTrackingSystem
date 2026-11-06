@@ -1,4 +1,4 @@
-namespace PTS.Domain.Entities;
+namespace PTS.Domain.Entities.Identities;
 
 public class UserRole
 {

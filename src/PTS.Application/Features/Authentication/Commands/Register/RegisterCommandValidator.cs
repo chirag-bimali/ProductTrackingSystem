@@ -3,6 +3,7 @@ using Microsoft.Extensions.Localization;
 using PTS.Application.Abstractions.Persistence;
 using PTS.Application.Common.Localization.Roles;
 using PTS.Application.Common.Localization.Users;
+using PTS.Application.Features.Authentication.Commands.Register;
 
 // using PTS.Domain.Constants;
 

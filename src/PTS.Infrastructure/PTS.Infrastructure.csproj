@@ -5,7 +5,7 @@
     <ProjectReference Include="..\PTS.Application\PTS.Application.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Persistence\Seed\locations.json" />
+    <EmbeddedResource Include="Resource\Location\locations.json" />
   </ItemGroup>
 
   <ItemGroup>

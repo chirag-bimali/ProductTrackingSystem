@@ -2,38 +2,20 @@ using System.Reflection;
 using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 using PTS.Domain.Entities;
+using PTS.Domain.Entities.Identities;
+using PTS.Infrastructure.Persistence.Seedings;
 
 namespace PTS.Infrastructure.Persistence.Seed;
 
-public class DbSeeder
+public class LocationSeeder : ISeeder
 {
     private readonly AppDbContext _db;
 
-    public DbSeeder(AppDbContext db) => _db = db;
+    public int Order => 6;
+
+    public LocationSeeder(AppDbContext db) => _db = db;
 
     public async Task SeedAsync(CancellationToken ct = default)
-    {
-        await SeedRolesAsync(ct);
-        await SeedLocationsAsync(ct);
-    }
-
-    private async Task SeedRolesAsync(CancellationToken ct)
-    {
-        if (await _db.Roles.AnyAsync(ct))
-            return;
-
-        _db.Roles.AddRange(
-            new Role("SuperAdmin", "सुपर एडमिन"),
-            new Role("FactoryAdmin", "फ्याक्ट्री एडमिन"),
-            new Role("Farmer", "किसान"),
-            new Role("LocalAdmin", "स्थानीय एडमिन"),
-            new Role("Collector", "संग्रहकर्ता")
-        );
-
-        await _db.SaveChangesAsync(ct);
-    }
-
-    private async Task SeedLocationsAsync(CancellationToken ct)
     {
         // Already seeded, so do nothing
         if (await _db.Provinces.AnyAsync(ct))

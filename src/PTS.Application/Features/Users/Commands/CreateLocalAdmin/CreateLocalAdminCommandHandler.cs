@@ -2,7 +2,7 @@ using PTS.Application.Abstractions.Messaging;
 using PTS.Application.Abstractions.Persistence;
 using PTS.Application.Common.Abstractions.Security;
 using PTS.Application.Common.Response;
-using PTS.Domain.Entities;
+using PTS.Domain.Entities.Identities;
 
 namespace PTS.Application.Features.Users.Commands.CreateLocalAdmin;
 

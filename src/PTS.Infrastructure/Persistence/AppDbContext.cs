@@ -1,6 +1,7 @@
 
 using Microsoft.EntityFrameworkCore;
 using PTS.Domain.Entities;
+using PTS.Domain.Entities.Identities;
 
 namespace PTS.Infrastructure.Persistence;
 

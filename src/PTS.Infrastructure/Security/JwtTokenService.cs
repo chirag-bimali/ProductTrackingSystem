@@ -4,7 +4,7 @@ using System.Text;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using PTS.Application.Abstractions.Security;
-using PTS.Domain.Entities;
+using PTS.Domain.Entities.Identities;
 
 namespace PTS.Infrastructure.Security;
 

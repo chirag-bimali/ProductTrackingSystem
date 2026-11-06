@@ -1,4 +1,5 @@
 using PTS.Domain.Entities;
+using PTS.Domain.Entities.Identities;
 
 namespace PTS.Application.Abstractions.Persistence;
 

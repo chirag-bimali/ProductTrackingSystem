@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using PTS.Application.Abstractions.Messaging;
 using PTS.Application.Abstractions.Security;
 using PTS.Application.Features.Authentication.Commands.Login;
-using PTS.Application.Features.Authorization.Command.Register;
+using PTS.Application.Features.Authentication.Commands.Register;
 
 namespace PTS.API.Controllers;
 

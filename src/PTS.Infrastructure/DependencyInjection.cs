@@ -5,7 +5,7 @@ using PTS.Application.Abstractions.Security;
 using PTS.Application.Common.Abstractions.Security;
 using PTS.Infrastructure.Persistence;
 using PTS.Infrastructure.Persistence.Repositories;
-using PTS.Infrastructure.Persistence.Seed;
+using PTS.Infrastructure.Persistence.Seedings;
 using PTS.Infrastructure.Security;
 
 namespace PTS.Infrastructure;
@@ -18,6 +18,7 @@ public static class DependencyInjection
     )
     {
         services.AddDbContext<AppDbContext>(options => options.UseNpgsql(connectionString));
+        services.AddSeeders();
 
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<IUserRepository, UserRepository>();
@@ -29,7 +30,7 @@ public static class DependencyInjection
         services.AddSingleton<IPasswordHasher, BcryptPasswordHasher>();
         services.AddSingleton<IJwtTokenService, JwtTokenService>();
 
-        services.AddScoped<DbSeeder>();
+        // services.AddScoped<DbSeeder>();
 
         services.AddScoped<IProductRepository, ProductRepository>();
 

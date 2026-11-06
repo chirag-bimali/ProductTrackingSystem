@@ -1,3 +1,5 @@
+using PTS.Domain.Entities.Identities;
+
 namespace PTS.Domain.Entities;
 
 public class Factory

@@ -1,6 +1,6 @@
-using PTS.Application.Common.Response;
 
-namespace PTS.Application.Features.Authorization.Command.Register;
+
+namespace PTS.Application.Features.Authentication.Commands.Register;
 
 public record RegisterCommand(
     string NameEn,

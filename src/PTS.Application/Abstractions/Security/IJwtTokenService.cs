@@ -1,5 +1,4 @@
-using PTS.Domain.Entities;
-using SE.Application.Abstractions.Security;
+using PTS.Domain.Entities.Identities;
 
 namespace PTS.Application.Abstractions.Security;
 

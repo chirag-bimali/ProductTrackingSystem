@@ -4,9 +4,9 @@ using PTS.Application.Abstractions.Persistence;
 using PTS.Application.Common.Abstractions.Security;
 using PTS.Application.Common.Localization.Roles;
 using PTS.Application.Common.Response;
-using PTS.Domain.Entities;
+using PTS.Domain.Entities.Identities;
 
-namespace PTS.Application.Features.Authorization.Command.Register;
+namespace PTS.Application.Features.Authentication.Commands.Register;
 
 public class RegisterCommandHandler : ICommandHandler<RegisterCommand, Guid>
 {

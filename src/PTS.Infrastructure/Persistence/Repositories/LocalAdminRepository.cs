@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using PTS.Application.Abstractions.Persistence;
-using PTS.Domain.Entities;
+using PTS.Domain.Entities.Identities;
 
 namespace PTS.Infrastructure.Persistence.Repositories;
 
