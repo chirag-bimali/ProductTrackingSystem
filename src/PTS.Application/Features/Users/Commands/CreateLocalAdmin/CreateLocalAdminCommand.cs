@@ -1,3 +1,4 @@
+using PTS.Application.Abstractions.Messaging;
 using PTS.Application.Common.Security;
 
 namespace PTS.Application.Features.Users.Commands.CreateLocalAdmin;
@@ -10,4 +11,4 @@ public record CreateLocalAdminCommand(
     string Email,
     string Password,
     int MunicipalityId
-);
+) : ICommand<Guid>;

@@ -32,6 +32,9 @@ var connectionString =
     ?? throw new InvalidOperationException(
         "Database connection string 'DefaultConnection' was not found."
     );
+
+Console.WriteLine($"Using connection string: {connectionString}");
+
 var jwtKey =
     builder.Configuration["Jwt:SigningKey"]
     ?? throw new InvalidOperationException("JWT signing key is missing.");

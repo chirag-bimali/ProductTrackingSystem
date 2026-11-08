@@ -6,15 +6,12 @@ using PTS.Application.Features.Users.Queries.GetMe;
 
 namespace PTS.API.Controllers;
 
-public class UserController(
-    ICommandHandler<CreateLocalAdminCommand, Guid> createLocalAdminCommandHandler,
-    IQueryHandler<GetAllLocalAdminQuery, GetAllLocalAdminQueryResult> getAllLocalAdminQueryHandler
-) : ApiControllerBase
+public class UserController(IDispatcher dispatcher) : ApiControllerBase
 {
     [HttpPost("LocalAdmin")]
     public async Task<IActionResult> CreateLocalAdmin([FromBody] CreateLocalAdminCommand command)
     {
-        var result = await createLocalAdminCommandHandler.Handle(
+        var result = await dispatcher.DispatchCommand<CreateLocalAdminCommand, Guid>(
             command,
             HttpContext.RequestAborted
         );
@@ -27,7 +24,10 @@ public class UserController(
         CancellationToken cancellationToken
     )
     {
-        var result = await getAllLocalAdminQueryHandler.Handle(query, cancellationToken);
+        var result = await dispatcher.DispatchQuery<
+            GetAllLocalAdminQuery,
+            GetAllLocalAdminQueryResult
+        >(query, cancellationToken);
         return FromResult(result);
     }
 

@@ -5,31 +5,32 @@ using PTS.Application.Common.Response;
 using PTS.Application.Common.Security;
 using SE.Application.Abstractions.Security;
 
-namespace PTS.Application.Abstractions.Behaviours;
+namespace PTS.Application.Abstractions.Behaviours.Common;
 
-internal sealed class AuthorizationQueryDecorator<TQuery, TResponse>(
-    IQueryHandler<TQuery, TResponse> inner,
+internal sealed class RequestAuthorization<TRequest, TResponse>(
     IPermissionService permissionService,
     ICurrentUser currentUser
-) : IQueryHandler<TQuery, TResponse>
+)
+    where TRequest : IRequest<TResponse>
 {
-    private static readonly string[] Required = typeof(TQuery)
+    private static readonly string[] Required = typeof(TRequest)
         .GetCustomAttributes<RequirePermissionAttribute>()
         .Select(a => a.Permission)
         .ToArray();
 
-    public async Task<Result<TResponse>> Handle(TQuery command, CancellationToken ct)
+    public async Task<Error?> AuthorizeAsync(CancellationToken ct)
     {
         if (Required.Any(p => p == Permissions.No.Permission))
-            return await inner.Handle(command, ct);
+            return null;
 
         if (!currentUser.IsAuthenticated)
-            return Error.Unauthorized("auth.unauthenticated", "You must be logged in");
+            return Error.Unauthorized("auth.unauthenticated", "You must be logged in to perform this action.");
 
         foreach (var permission in Required)
         {
             if (permission == Permissions.No.Permission)
                 continue;
+
             if (
                 !await permissionService.HasPermissionAsync(
                     currentUser.Id ?? throw new Exception("Something went wrong."),
@@ -43,6 +44,6 @@ internal sealed class AuthorizationQueryDecorator<TQuery, TResponse>(
                 );
         }
 
-        return await inner.Handle(command, ct);
+        return null;
     }
 }

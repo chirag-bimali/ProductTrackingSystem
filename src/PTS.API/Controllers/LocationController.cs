@@ -1,44 +1,18 @@
 using Microsoft.AspNetCore.Mvc;
 using PTS.API.Controllers;
 using PTS.Application.Abstractions.Messaging;
-using PTS.Application.Features.Locations.Queries.GetAllLocationQuery;
-using DistrictQueries = PTS.Application.Features.Locations.Queries.GetAllDistrictByProvinceIdQuery;
-using MunicipalityQueries = PTS.Application.Features.Locations.Queries.GetAllMunicipalityByDistrictIdQuery;
-using ProvinceQueries = PTS.Application.Features.Locations.Queries.GetAllProvinceQuery;
-using WardQueries = PTS.Application.Features.Locations.Queries.GetAllWardByMunicipalityIdQuery;
+using PTS.Application.Features.Locations.Queries.GetAllDistrictByProvinceIdQuery;
+using PTS.Application.Features.Locations.Queries.GetAllMunicipalityByDistrictIdQuery;
+using PTS.Application.Features.Locations.Queries.GetAllProvinceQuery;
+using PTS.Application.Features.Locations.Queries.GetAllWardByMunicipalityIdQuery;
 
-public class LocationController(
-    IQueryHandler<GetAllLocationQuery, GetAllLocationQueryResult> getAllLocationQueryHandler,
-    IQueryHandler<
-        ProvinceQueries.GetAllProvinceQuery,
-        List<ProvinceQueries.ProvinceResult>
-    > getAllProvinceQueryHandler,
-    IQueryHandler<
-        DistrictQueries.GetAllDistrictByProvinceIdQuery,
-        List<DistrictQueries.DistrictResult>
-    > getAllDistrictQueryHandler,
-    IQueryHandler<
-        MunicipalityQueries.GetAllMunicipalityByDistrictIdQuery,
-        List<MunicipalityQueries.MunicipalityResult>
-    > getAllMunicipalityQueryHandler,
-    IQueryHandler<
-        WardQueries.GetAllWardByMunicipalityIdQuery,
-        List<WardQueries.WardResult>
-    > getAllWardQueryHandler
-) : ApiControllerBase
+public class LocationController(IDispatcher dispatcher) : ApiControllerBase
 {
-    [HttpGet]
-    public async Task<IActionResult> GetAllLocation(CancellationToken ct)
-    {
-        var result = await getAllLocationQueryHandler.Handle(new GetAllLocationQuery(), ct);
-        return FromResult(result);
-    }
-
     [HttpGet("Provinces")]
     public async Task<IActionResult> GetAllProvinces(CancellationToken ct)
     {
-        var result = await getAllProvinceQueryHandler.Handle(
-            new ProvinceQueries.GetAllProvinceQuery(),
+        var result = await dispatcher.DispatchQuery<GetAllProvinceQuery, List<ProvinceResult>>(
+            new GetAllProvinceQuery(),
             ct
         );
 
@@ -51,10 +25,10 @@ public class LocationController(
         CancellationToken ct
     )
     {
-        var result = await getAllDistrictQueryHandler.Handle(
-            new DistrictQueries.GetAllDistrictByProvinceIdQuery(provinceId),
-            ct
-        );
+        var result = await dispatcher.DispatchQuery<
+            GetAllDistrictByProvinceIdQuery,
+            List<DistrictResult>
+        >(new GetAllDistrictByProvinceIdQuery(provinceId), ct);
 
         return FromResult(result);
     }
@@ -65,10 +39,10 @@ public class LocationController(
         CancellationToken ct
     )
     {
-        var result = await getAllMunicipalityQueryHandler.Handle(
-            new MunicipalityQueries.GetAllMunicipalityByDistrictIdQuery(districtId),
-            ct
-        );
+        var result = await dispatcher.DispatchQuery<
+            GetAllMunicipalityByDistrictIdQuery,
+            List<MunicipalityResult>
+        >(new GetAllMunicipalityByDistrictIdQuery(districtId), ct);
 
         return FromResult(result);
     }
@@ -79,10 +53,10 @@ public class LocationController(
         CancellationToken ct
     )
     {
-        var result = await getAllWardQueryHandler.Handle(
-            new WardQueries.GetAllWardByMunicipalityIdQuery(municipalityId),
-            ct
-        );
+        var result = await dispatcher.DispatchQuery<
+            GetAllWardByMunicipalityIdQuery,
+            List<WardResult>
+        >(new GetAllWardByMunicipalityIdQuery(municipalityId), ct);
 
         return FromResult(result);
     }

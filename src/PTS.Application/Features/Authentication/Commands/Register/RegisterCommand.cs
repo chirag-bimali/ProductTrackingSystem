@@ -1,3 +1,4 @@
+using PTS.Application.Abstractions.Messaging;
 using PTS.Application.Common.Security;
 
 namespace PTS.Application.Features.Authentication.Commands.Register;
@@ -11,6 +12,6 @@ public record RegisterCommand(
     string Email,
     string Password,
     string Role // "Farmer" or "FactoryAdmin"
-);
+) : ICommand<RegisterResult>;
 
-public record RegisterResult(Guid UserId, string Email, string Role, bool IsVerified);
+public record RegisterResult(Guid UserId);

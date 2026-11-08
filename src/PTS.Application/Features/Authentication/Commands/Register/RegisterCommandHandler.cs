@@ -8,7 +8,7 @@ using PTS.Domain.Entities.Identities;
 
 namespace PTS.Application.Features.Authentication.Commands.Register;
 
-public class RegisterCommandHandler : ICommandHandler<RegisterCommand, Guid>
+public class RegisterCommandHandler : ICommandHandler<RegisterCommand, RegisterResult>
 {
     private readonly IUserRepository _users;
     private readonly IUserRoleRepository _userRoles;
@@ -38,7 +38,7 @@ public class RegisterCommandHandler : ICommandHandler<RegisterCommand, Guid>
         _localizer = localizer;
     }
 
-    public async Task<Result<Guid>> Handle(RegisterCommand request, CancellationToken ct)
+    public async Task<Result<RegisterResult>> Handle(RegisterCommand request, CancellationToken ct)
     {
         var role = await _roles.GetByNameAsync(request.Role, ct);
         if (role is null)
@@ -59,6 +59,6 @@ public class RegisterCommandHandler : ICommandHandler<RegisterCommand, Guid>
 
         await _uow.SaveChangesAsync(ct);
 
-        return user.Id;
+        return new RegisterResult(user.Id);
     }
 }

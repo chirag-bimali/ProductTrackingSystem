@@ -1,6 +1,8 @@
+using PTS.Application.Abstractions.Messaging;
 using PTS.Application.Common.Security;
 
 namespace PTS.Application.Features.Users.Queries.GetAllLocalAdmin;
 
 [RequirePermission(Permissions.LocalAdmin.ReadAll)]
-public record GetAllLocalAdminQuery(int PageNumber = 1, int PageSize = 10);
+public record GetAllLocalAdminQuery(int PageNumber = 1, int PageSize = 10)
+    : IQuery<GetAllLocalAdminQueryResult>;

@@ -9,22 +9,19 @@ using PTS.Application.Features.Authentication.Commands.Register;
 namespace PTS.API.Controllers;
 
 [AllowAnonymous]
-public class AuthController(
-    ICommandHandler<RegisterCommand, Guid> register,
-    ICommandHandler<LoginCommand, GeneratedToken> login
-) : ApiControllerBase
+public class AuthController(IDispatcher dispatcher) : ApiControllerBase
 {
     [HttpPost("register")]
     public async Task<IActionResult> Register(RegisterCommand command, CancellationToken ct)
     {
-        var result = await register.Handle(command, ct);
+        var result = await dispatcher.DispatchCommand<RegisterCommand, RegisterResult>(command, ct);
         return FromResult(result);
     }
 
     [HttpPost("login")]
     public async Task<IActionResult> Login(LoginCommand command, CancellationToken ct)
     {
-        var result = await login.Handle(command, ct);
+        var result = await dispatcher.DispatchCommand<LoginCommand, GeneratedToken>(command, ct);
         return FromResult(result);
     }
 }

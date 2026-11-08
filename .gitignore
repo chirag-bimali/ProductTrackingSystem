@@ -57,6 +57,7 @@ TestResult.xml
 nunit-*.xml
 
 **/appsettings.json
+**/appsettings.Development.json
 temp
 .vscode
 Migrations
