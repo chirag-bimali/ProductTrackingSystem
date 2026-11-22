@@ -6,15 +6,10 @@ public class Unit
     public string NameEn { get; private set; } = string.Empty;
     public string NameNp { get; private set; } = string.Empty;
     public string Abbreviation { get; private set; } = string.Empty;
-    public bool IsBaseUnit { get; private set; }
     public DateTime CreatedAt { get; private set; }
 
     public Guid UnitCategoryId { get; private set; }
     public UnitCategory UnitCategory { get; private set; } = null!;
-
-    public ICollection<UnitConversion> FromConversions { get; private set; } = new List<UnitConversion>();
-    public ICollection<UnitConversion> ToConversions { get; private set; } = new List<UnitConversion>();
-    public ICollection<Material> Materials { get; private set; } = new List<Material>();
 
     private Unit() { }
 
@@ -22,8 +17,8 @@ public class Unit
         string nameEn,
         string nameNp,
         string abbreviation,
-        Guid unitCategoryId,
-        bool isBaseUnit = false)
+        Guid unitCategoryId
+    )
     {
         if (string.IsNullOrWhiteSpace(nameEn))
             throw new ArgumentException("English name cannot be empty.", nameof(nameEn));
@@ -39,11 +34,10 @@ public class Unit
         NameNp = nameNp;
         Abbreviation = abbreviation;
         UnitCategoryId = unitCategoryId;
-        IsBaseUnit = isBaseUnit;
         CreatedAt = DateTime.UtcNow;
     }
 
-    public void Update(string nameEn, string nameNp, string abbreviation, Guid unitCategoryId, bool isBaseUnit)
+    public void Update(string nameEn, string nameNp, string abbreviation, Guid unitCategoryId)
     {
         if (string.IsNullOrWhiteSpace(nameEn))
             throw new ArgumentException("English name cannot be empty.", nameof(nameEn));
@@ -58,11 +52,6 @@ public class Unit
         NameNp = nameNp;
         Abbreviation = abbreviation;
         UnitCategoryId = unitCategoryId;
-        IsBaseUnit = isBaseUnit;
     }
 
-    public void SetBaseUnit(bool isBaseUnit)
-    {
-        IsBaseUnit = isBaseUnit;
-    }
 }

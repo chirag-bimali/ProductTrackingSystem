@@ -15,7 +15,6 @@ using PTS.Application;
 using PTS.Application.Abstractions.Security;
 using PTS.Application.Common.Localization.Shared;
 using PTS.Application.Common.Response;
-using PTS.Application.Features.Products.CreateProduct;
 using PTS.Infrastructure;
 using PTS.Infrastructure.Persistence.Seed;
 using PTS.Infrastructure.Persistence.Seedings;

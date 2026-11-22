@@ -28,6 +28,10 @@ public static class DependencyInjection
         services.AddScoped<IRoleRepository, RoleRepository>();
         services.AddScoped<ILocationRepository, LocationRepository>();
         services.AddScoped<ILocalAdminRepository, LocalAdminRepository>();
+        services.AddScoped<IUnitCategoryRepository, UnitCategoryRepository>();
+        services.AddScoped<IUnitRepository, UnitRepository>();
+        services.AddScoped<IMaterialCategoryRepository, MaterialCategoryRepository>();
+        services.AddScoped<IMaterialRepository, MaterialRepository>();
 
         services.AddSingleton<IPasswordHasher, BcryptPasswordHasher>();
         services.AddSingleton<IJwtTokenService, JwtTokenService>();

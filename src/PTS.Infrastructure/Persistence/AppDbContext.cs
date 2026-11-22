@@ -1,5 +1,6 @@
 
 using Microsoft.EntityFrameworkCore;
+using PTS.Domain.Entities.Materials;
 using PTS.Domain.Entities;
 using PTS.Domain.Entities.Identities;
 
@@ -19,6 +20,13 @@ public class AppDbContext(
     public DbSet<District> Districts => Set<District>();
     public DbSet<Municipality> Municipalities => Set<Municipality>();
     public DbSet<Ward> Wards => Set<Ward>();
+
+    public DbSet<Unit> Units => Set<Unit>();
+    public DbSet<UnitCategory> UnitCategories => Set<UnitCategory>();
+    public DbSet<MaterialCategory> MaterialCategories => Set<MaterialCategory>();
+    public DbSet<Material> Materials => Set<Material>();
+    public DbSet<MaterialUnit> MaterialUnits => Set<MaterialUnit>();
+
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

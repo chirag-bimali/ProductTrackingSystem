@@ -3,17 +3,10 @@ using PTS.Application.Abstractions.Persistence;
 using PTS.Application.Common.Response;
 using PTS.Domain.Entities;
 
-namespace PTS.Application.Features.Products.CreateProduct;
+namespace PTS.Application.Features.Products.Commands.CreateProduct;
 
-public sealed class CreateProductHandler : ICommandHandler<CreateProductCommand, Guid>
+public sealed class CreateProductHandler(IProductRepository _productRepository) : ICommandHandler<CreateProductCommand, Guid>
 {
-    private readonly IProductRepository _productRepository;
-
-    public CreateProductHandler(IProductRepository productRepository)
-    {
-        _productRepository = productRepository;
-    }
-
     public async Task<Result<Guid>> Handle(
         CreateProductCommand request,
         CancellationToken cancellationToken

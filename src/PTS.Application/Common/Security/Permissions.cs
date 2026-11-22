@@ -28,6 +28,27 @@ public static class Permissions
         public const string Read = "roles.read";
     }
 
+    public static class Units
+    {
+        public const string Create = "units.create";
+        public const string Update = "units.update";
+        public const string Delete = "units.delete";
+    }
+
+    public static class MaterialCategories
+    {
+        public const string Create = "material_categories.create";
+        public const string Update = "material_categories.update";
+        public const string Delete = "material_categories.delete";
+    }
+
+    public static class Materials
+    {
+        public const string Create = "materials.create";
+        public const string Update = "materials.update";
+        public const string Delete = "materials.delete";
+    }
+
     public static class SuperAdmin
     {
         public const string Access = "super_admin.access";
