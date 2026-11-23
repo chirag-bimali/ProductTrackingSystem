@@ -16,7 +16,6 @@ public class RegisterCommandValidator : AbstractValidator<RegisterCommand>
         "Farmer",
         "FactoryAdmin",
         "SystemAdmin",
-        "Admin",
     ];
 
     public RegisterCommandValidator(
