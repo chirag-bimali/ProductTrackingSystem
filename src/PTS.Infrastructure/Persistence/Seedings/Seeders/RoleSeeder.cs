@@ -6,7 +6,7 @@ namespace PTS.Infrastructure.Persistence.Seedings.Seeders;
 
 public class RoleSeeder(AppDbContext _db) : ISeeder
 {
-    public int Order => 5;
+    public int Order => 0;
     public static readonly (string NameEn, string NameNp)[] Roles =
     [
         ("SuperAdmin", "सुपर एडमिन"),
