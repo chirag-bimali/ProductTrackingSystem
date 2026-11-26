@@ -5,4 +5,10 @@
     <Project Path="src/PTS.Domain/PTS.Domain.csproj" />
     <Project Path="src/PTS.Infrastructure/PTS.Infrastructure.csproj" />
   </Folder>
+  <!-- <Folder Name="/tests/">
+    <Project Path="tests/PTS.API.Tests/PTS.API.Tests.csproj" />
+    <Project Path="tests/PTS.Application.Tests/PTS.Application.Tests.csproj" />
+    <Project Path="tests/PTS.Domain.Tests/PTS.Domain.Tests.csproj" />
+    <Project Path="tests/PTS.Infrastructure.Tests/PTS.Infrastructure.Tests.csproj" />
+  </Folder> -->
 </Solution>

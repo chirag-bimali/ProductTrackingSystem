@@ -11,12 +11,6 @@ public sealed class UpdateMaterialCommandValidator : AbstractValidator<UpdateMat
             .NotEmpty()
             .WithMessage("Material ID is required.");
 
-        RuleFor(command => command.Code)
-            .NotEmpty()
-            .WithMessage("Material code is required.")
-            .MaximumLength(50)
-            .WithMessage("Material code cannot exceed 50 characters.");
-
         RuleFor(command => command.NameEn)
             .NotEmpty()
             .WithMessage("English name is required.")
@@ -32,14 +26,6 @@ public sealed class UpdateMaterialCommandValidator : AbstractValidator<UpdateMat
         RuleFor(command => command.MaterialCategoryId)
             .NotEmpty()
             .WithMessage("Material category ID is required.");
-
-        RuleFor(command => command.MinimumStockLevel)
-            .GreaterThanOrEqualTo(0)
-            .WithMessage("Minimum stock level cannot be negative.");
-
-        RuleFor(command => command.ReorderLevel)
-            .GreaterThanOrEqualTo(0)
-            .WithMessage("Reorder level cannot be negative.");
 
         RuleFor(command => command.Description)
             .MaximumLength(1000)

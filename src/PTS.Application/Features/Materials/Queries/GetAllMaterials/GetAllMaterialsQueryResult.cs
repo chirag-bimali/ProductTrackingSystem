@@ -11,7 +11,8 @@ public sealed record MaterialUnitResult(
     string UnitCategoryNameEn,
     string UnitCategoryNameNp,
     decimal ConversionFactorToBaseUnit,
-    bool IsBaseUnit)
+    bool IsBaseUnit
+)
 {
     public static MaterialUnitResult FromEntity(MaterialUnit materialUnit) =>
         new(
@@ -23,12 +24,12 @@ public sealed record MaterialUnitResult(
             materialUnit.Unit.UnitCategory.NameEn,
             materialUnit.Unit.UnitCategory.NameNp,
             materialUnit.ConversionFactorToBaseUnit,
-            materialUnit.IsBaseUnit);
+            materialUnit.IsBaseUnit
+        );
 }
 
 public sealed record MaterialResult(
     Guid Id,
-    string Code,
     string NameEn,
     string NameNp,
     string? Description,
@@ -40,12 +41,12 @@ public sealed record MaterialResult(
     string MaterialCategoryNameEn,
     string MaterialCategoryNameNp,
     DateTime CreatedAt,
-    List<MaterialUnitResult> Units)
+    List<MaterialUnitResult> Units
+)
 {
     public static MaterialResult FromEntity(Material material) =>
         new(
             material.Id,
-            material.Code,
             material.NameEn,
             material.NameNp,
             material.Description,
@@ -57,9 +58,10 @@ public sealed record MaterialResult(
             material.MaterialCategory.NameEn,
             material.MaterialCategory.NameNp,
             material.CreatedAt,
-            material.MaterialUnits
-                .OrderByDescending(materialUnit => materialUnit.IsBaseUnit)
+            material
+                .MaterialUnits.OrderByDescending(materialUnit => materialUnit.IsBaseUnit)
                 .ThenBy(materialUnit => materialUnit.Unit.NameEn)
                 .Select(MaterialUnitResult.FromEntity)
-                .ToList());
+                .ToList()
+        );
 }

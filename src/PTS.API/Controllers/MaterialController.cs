@@ -14,21 +14,21 @@ public sealed class MaterialController(IDispatcher dispatcher) : ApiControllerBa
     [HttpGet]
     public async Task<IActionResult> GetAll(CancellationToken ct)
     {
-        var result = await dispatcher.DispatchQuery<GetAllMaterialsQuery, List<MaterialResult>>(
-            new GetAllMaterialsQuery(),
-            ct);
+        var result = await dispatcher.DispatchQuery<
+            GetAllMaterialsQuery,
+            List<Application.Features.Materials.Queries.GetAllMaterials.MaterialResult>
+        >(new GetAllMaterialsQuery(), ct);
 
         return FromResult(result);
     }
 
     [HttpGet("{materialId:guid}")]
-    public async Task<IActionResult> GetById(
-        [FromRoute] Guid materialId,
-        CancellationToken ct)
+    public async Task<IActionResult> GetById([FromRoute] Guid materialId, CancellationToken ct)
     {
-        var result = await dispatcher.DispatchQuery<GetMaterialByIdQuery, MaterialResult>(
-            new GetMaterialByIdQuery(materialId),
-            ct);
+        var result = await dispatcher.DispatchQuery<
+            GetMaterialByIdQuery,
+            Application.Features.Materials.Queries.GetMaterialById.MaterialResult
+        >(new GetMaterialByIdQuery(materialId), ct);
 
         return FromResult(result);
     }
@@ -36,7 +36,8 @@ public sealed class MaterialController(IDispatcher dispatcher) : ApiControllerBa
     [HttpPost]
     public async Task<IActionResult> Create(
         [FromBody] CreateMaterialCommand command,
-        CancellationToken ct)
+        CancellationToken ct
+    )
     {
         var result = await dispatcher.DispatchCommand<CreateMaterialCommand, Guid>(command, ct);
 
@@ -47,20 +48,17 @@ public sealed class MaterialController(IDispatcher dispatcher) : ApiControllerBa
     public async Task<IActionResult> Update(
         [FromRoute] Guid materialId,
         [FromBody] UpdateMaterialRequest request,
-        CancellationToken ct)
+        CancellationToken ct
+    )
     {
         var command = new UpdateMaterialCommand(
             materialId,
-            request.Code,
             request.NameEn,
             request.NameNp,
             request.MaterialCategoryId,
-            request.IsBatchTracked,
-            request.IsSerialTracked,
-            request.MinimumStockLevel,
-            request.ReorderLevel,
             request.Description,
-            request.Units);
+            request.Units
+        );
 
         var result = await dispatcher.DispatchCommand<UpdateMaterialCommand, Unit>(command, ct);
 
@@ -68,13 +66,12 @@ public sealed class MaterialController(IDispatcher dispatcher) : ApiControllerBa
     }
 
     [HttpDelete("{materialId:guid}")]
-    public async Task<IActionResult> Delete(
-        [FromRoute] Guid materialId,
-        CancellationToken ct)
+    public async Task<IActionResult> Delete([FromRoute] Guid materialId, CancellationToken ct)
     {
         var result = await dispatcher.DispatchCommand<DeleteMaterialCommand, Unit>(
             new DeleteMaterialCommand(materialId),
-            ct);
+            ct
+        );
 
         return FromNoContent(result);
     }

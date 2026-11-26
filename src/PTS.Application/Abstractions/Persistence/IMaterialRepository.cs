@@ -15,7 +15,6 @@ public interface IMaterialRepository : IRepository<Material>
     Task<bool> UnitsExistAsync(IReadOnlyCollection<Guid> unitIds, CancellationToken ct);
 
     Task<bool> HasConflictAsync(
-        string code,
         string nameEn,
         Guid? excludedMaterialId,
         CancellationToken ct);

@@ -32,7 +32,6 @@ var connectionString =
         "Database connection string 'DefaultConnection' was not found."
     );
 
-Console.WriteLine($"Using connection string: {connectionString}");
 
 var jwtKey =
     builder.Configuration["Jwt:SigningKey"]
@@ -190,3 +189,5 @@ app.UseHttpsRedirection();
 app.MapControllers();
 
 app.Run();
+
+public partial class Program;

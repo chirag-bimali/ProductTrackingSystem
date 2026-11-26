@@ -7,9 +7,6 @@ public sealed record UpdateMaterialRequest(
     string NameEn,
     string NameNp,
     Guid MaterialCategoryId,
-    bool IsBatchTracked,
-    bool IsSerialTracked,
-    decimal MinimumStockLevel,
-    decimal ReorderLevel,
     string? Description,
-    IReadOnlyCollection<MaterialUnitInput> Units);
+    IReadOnlyCollection<MaterialUnitInput> Units
+);

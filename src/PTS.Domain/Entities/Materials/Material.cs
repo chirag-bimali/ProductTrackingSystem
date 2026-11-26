@@ -3,7 +3,6 @@ namespace PTS.Domain.Entities.Materials;
 public class Material
 {
     public Guid Id { get; private set; }
-    public string Code { get; private set; } = string.Empty;
     public string NameEn { get; private set; } = string.Empty;
     public string NameNp { get; private set; } = string.Empty;
     public string? Description { get; private set; }
@@ -18,44 +17,32 @@ public class Material
 
     public ICollection<MaterialUnit> MaterialUnits { get; private set; } = new List<MaterialUnit>();
     public ICollection<MaterialBatch> Batches { get; private set; } = new List<MaterialBatch>();
-    public ICollection<MaterialSerialNumber> SerialNumbers { get; private set; } = new List<MaterialSerialNumber>();
+    public ICollection<MaterialSerialNumber> SerialNumbers { get; private set; } =
+        new List<MaterialSerialNumber>();
 
     private Material() { }
 
     public Material(
-        string code,
         string nameEn,
         string nameNp,
         Guid materialCategoryId,
         IEnumerable<(Guid UnitId, decimal ConversionFactorToBaseUnit, bool IsBaseUnit)> units,
-        bool isBatchTracked = false,
-        bool isSerialTracked = false,
-        decimal minimumStockLevel = 0,
-        decimal reorderLevel = 0,
-        string? description = null)
+        string? description = null
+    )
     {
-        if (string.IsNullOrWhiteSpace(code))
-            throw new ArgumentException("Material code cannot be empty.", nameof(code));
         if (string.IsNullOrWhiteSpace(nameEn))
             throw new ArgumentException("English name cannot be empty.", nameof(nameEn));
         if (string.IsNullOrWhiteSpace(nameNp))
             throw new ArgumentException("Nepali name cannot be empty.", nameof(nameNp));
         if (materialCategoryId == Guid.Empty)
-            throw new ArgumentException("Material category ID is required.", nameof(materialCategoryId));
-        if (minimumStockLevel < 0)
-            throw new ArgumentException("Minimum stock level cannot be negative.", nameof(minimumStockLevel));
-        if (reorderLevel < 0)
-            throw new ArgumentException("Reorder level cannot be negative.", nameof(reorderLevel));
-
+            throw new ArgumentException(
+                "Material category ID is required.",
+                nameof(materialCategoryId)
+            );
         Id = Guid.NewGuid();
-        Code = code;
         NameEn = nameEn;
         NameNp = nameNp;
         MaterialCategoryId = materialCategoryId;
-        IsBatchTracked = isBatchTracked;
-        IsSerialTracked = isSerialTracked;
-        MinimumStockLevel = minimumStockLevel;
-        ReorderLevel = reorderLevel;
         Description = description;
         CreatedAt = DateTime.UtcNow;
 
@@ -63,42 +50,31 @@ public class Material
     }
 
     public void Update(
-        string code,
         string nameEn,
         string nameNp,
         Guid materialCategoryId,
-        bool isBatchTracked,
-        bool isSerialTracked,
-        decimal minimumStockLevel,
-        decimal reorderLevel,
-        string? description = null)
+        string? description = null
+    )
     {
-        if (string.IsNullOrWhiteSpace(code))
-            throw new ArgumentException("Material code cannot be empty.", nameof(code));
         if (string.IsNullOrWhiteSpace(nameEn))
             throw new ArgumentException("English name cannot be empty.", nameof(nameEn));
         if (string.IsNullOrWhiteSpace(nameNp))
             throw new ArgumentException("Nepali name cannot be empty.", nameof(nameNp));
         if (materialCategoryId == Guid.Empty)
-            throw new ArgumentException("Material category ID is required.", nameof(materialCategoryId));
-        if (minimumStockLevel < 0)
-            throw new ArgumentException("Minimum stock level cannot be negative.", nameof(minimumStockLevel));
-        if (reorderLevel < 0)
-            throw new ArgumentException("Reorder level cannot be negative.", nameof(reorderLevel));
+            throw new ArgumentException(
+                "Material category ID is required.",
+                nameof(materialCategoryId)
+            );
 
-        Code = code;
         NameEn = nameEn;
         NameNp = nameNp;
         MaterialCategoryId = materialCategoryId;
-        IsBatchTracked = isBatchTracked;
-        IsSerialTracked = isSerialTracked;
-        MinimumStockLevel = minimumStockLevel;
-        ReorderLevel = reorderLevel;
         Description = description;
     }
 
     public void ReplaceUnits(
-        IEnumerable<(Guid UnitId, decimal ConversionFactorToBaseUnit, bool IsBaseUnit)> units)
+        IEnumerable<(Guid UnitId, decimal ConversionFactorToBaseUnit, bool IsBaseUnit)> units
+    )
     {
         ArgumentNullException.ThrowIfNull(units);
 
@@ -122,16 +98,23 @@ public class Material
         if (existingBaseUnit is not null && existingBaseUnit.UnitId != requestedBaseUnitId)
         {
             throw new InvalidOperationException(
-                "The base unit cannot be changed after the material is created.");
+                "The base unit cannot be changed after the material is created."
+            );
         }
 
         foreach (var unit in requestedUnits)
         {
             if (unit.ConversionFactorToBaseUnit <= 0)
-                throw new ArgumentException("Conversion factors must be greater than zero.", nameof(units));
+                throw new ArgumentException(
+                    "Conversion factors must be greater than zero.",
+                    nameof(units)
+                );
 
             if (unit.IsBaseUnit && unit.ConversionFactorToBaseUnit != 1m)
-                throw new ArgumentException("The base unit conversion factor must be 1.", nameof(units));
+                throw new ArgumentException(
+                    "The base unit conversion factor must be 1.",
+                    nameof(units)
+                );
         }
 
         var requestedUnitIds = requestedUnits.Select(unit => unit.UnitId).ToHashSet();
@@ -144,8 +127,9 @@ public class Material
 
         foreach (var requestedUnit in requestedUnits)
         {
-            var existingUnit = MaterialUnits.FirstOrDefault(
-                unit => unit.UnitId == requestedUnit.UnitId);
+            var existingUnit = MaterialUnits.FirstOrDefault(unit =>
+                unit.UnitId == requestedUnit.UnitId
+            );
 
             if (existingUnit is null)
             {
@@ -154,15 +138,17 @@ public class Material
                         Id,
                         requestedUnit.UnitId,
                         requestedUnit.ConversionFactorToBaseUnit,
-                        requestedUnit.IsBaseUnit));
+                        requestedUnit.IsBaseUnit
+                    )
+                );
             }
             else
             {
                 existingUnit.Reconfigure(
                     requestedUnit.ConversionFactorToBaseUnit,
-                    requestedUnit.IsBaseUnit);
+                    requestedUnit.IsBaseUnit
+                );
             }
         }
     }
-
 }

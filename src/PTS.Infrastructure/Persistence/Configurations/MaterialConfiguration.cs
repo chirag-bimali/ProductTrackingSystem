@@ -10,7 +10,6 @@ public sealed class MaterialConfiguration : IEntityTypeConfiguration<Material>
     {
         builder.HasKey(material => material.Id);
 
-        builder.Property(material => material.Code).IsRequired().HasMaxLength(50);
         builder.Property(material => material.NameEn).IsRequired().HasMaxLength(200);
         builder.Property(material => material.NameNp).IsRequired().HasMaxLength(200);
         builder.Property(material => material.Description).HasMaxLength(1000);
@@ -18,7 +17,6 @@ public sealed class MaterialConfiguration : IEntityTypeConfiguration<Material>
         builder.Property(material => material.ReorderLevel).HasPrecision(18, 6);
         builder.Property(material => material.CreatedAt).IsRequired();
 
-        builder.HasIndex(material => material.Code).IsUnique();
         builder.HasIndex(material => material.NameEn).IsUnique();
         builder.HasIndex(material => material.MaterialCategoryId);
 
