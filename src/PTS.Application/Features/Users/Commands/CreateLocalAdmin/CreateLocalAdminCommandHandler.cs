@@ -10,7 +10,8 @@ public class CreateLocalAdminCommandHandler(
     IPasswordHasher passwordHasher,
     IUserRepository users,
     ILocalAdminRepository localAdmins,
-    IUnitOfWork unitOfWork
+    IUnitOfWork unitOfWork,
+    IRoleRepository roles
 ) : ICommandHandler<CreateLocalAdminCommand, Guid>
 {
     public async Task<Result<Guid>> Handle(
@@ -32,6 +33,13 @@ public class CreateLocalAdminCommandHandler(
             UserId = user.Id,
             MunicipalityId = request.MunicipalityId,
         };
+        var role = await roles.GetByNameAsync("LocalAdmin", cancellationToken);
+        if (role is null)
+        {
+            return Error.NotFound("role.not_found", "Role 'LocalAdmin' not found.");
+        }
+        user.AssignRole(role);
+
         await users.AddAsync(user, cancellationToken);
         await localAdmins.AddAsync(localAdmin, cancellationToken);
 
